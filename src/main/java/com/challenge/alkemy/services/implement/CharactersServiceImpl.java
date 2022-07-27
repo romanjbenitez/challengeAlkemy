@@ -50,4 +50,9 @@ public class CharactersServiceImpl implements CharactersService {
         characterRepository.save(character);
     }
 
+    @Override
+    public void deleteCharacter(Character character) {
+        characterRepository.delete(character);
+    }
+
 }

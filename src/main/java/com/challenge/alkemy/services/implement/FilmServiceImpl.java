@@ -54,4 +54,9 @@ public class FilmServiceImpl implements FilmService {
     public void saveFilm(Film film) {
         filmRepository.save(film);
     }
+
+    @Override
+    public void deleteFilm(Film film) {
+        filmRepository.delete(film);
+    }
 }

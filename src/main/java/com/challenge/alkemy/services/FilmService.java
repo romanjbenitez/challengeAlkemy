@@ -22,4 +22,5 @@ public interface FilmService{
 
 
     void saveFilm(Film film);
+    void deleteFilm(Film film);
 }

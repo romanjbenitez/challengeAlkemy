@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/characters")
 public class CharacterController {
     @Autowired
     private CharactersService charactersService;
@@ -24,7 +24,7 @@ public class CharacterController {
     @Autowired
     private FilmsCharacterService filmsCharacterService;
 
-    @GetMapping("/characters")
+    @GetMapping
     public List<CharacterDTO> getCharacters(@RequestParam(required = false) String name,
                                             @RequestParam(required = false) Integer age,
                                             @RequestParam(required = false) Long idMovie) {
@@ -43,7 +43,7 @@ public class CharacterController {
         return charactersService.getCharacters();
     }
 
-    @PostMapping("/characters")
+    @PostMapping
     public ResponseEntity<Object> createCharacter(@RequestParam String name,
                                                   @RequestParam String image,
                                                   @RequestParam long age,
@@ -71,7 +71,7 @@ public class CharacterController {
 
     }
 
-    @PatchMapping("/characters")
+    @PatchMapping
     public ResponseEntity<Object> updateCharacter(@RequestParam Long id,
                                                   @RequestParam(required = false) String name,
                                                   @RequestParam(required = false) String image,
@@ -113,4 +113,20 @@ public class CharacterController {
         return new ResponseEntity<>("updated", HttpStatus.CREATED);
     }
 
+    @DeleteMapping
+    public ResponseEntity<Object> deleteCharacter(@RequestParam Long idCharacter){
+
+        if(idCharacter < 0){
+            return new ResponseEntity<>("Missing data" , HttpStatus.FORBIDDEN);
+        }
+
+        Character currentCharacter = charactersService.getCharacter(idCharacter);
+
+        if(currentCharacter == null){
+            return new ResponseEntity<>("Please insert a valid id" , HttpStatus.FORBIDDEN);
+        }
+
+        charactersService.deleteCharacter(currentCharacter);
+        return new ResponseEntity<>("Deleted" ,HttpStatus.ACCEPTED);
+    }
 }

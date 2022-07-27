@@ -1,6 +1,7 @@
 package com.challenge.alkemy.controllers;
 
 import com.challenge.alkemy.dtos.FilmDTO;
+import com.challenge.alkemy.models.Character;
 import com.challenge.alkemy.models.Film;
 import com.challenge.alkemy.models.FilmsCharacter;
 import com.challenge.alkemy.models.Genre;
@@ -110,4 +111,21 @@ public class FilmController {
 
         return new ResponseEntity<>("Updated", HttpStatus.CREATED);
     }
+    @DeleteMapping
+    public ResponseEntity<Object> deleteFilm(@RequestParam Long idFilm ){
+
+        if(idFilm < 0){
+            return new ResponseEntity<>("Missing data" , HttpStatus.FORBIDDEN);
+        }
+
+        Film currentFilm = filmService.getFilmByID(idFilm);
+
+        if(currentFilm == null){
+            return new ResponseEntity<>("Please insert a valid id" , HttpStatus.FORBIDDEN);
+        }
+        filmService.deleteFilm(currentFilm);
+
+        return new ResponseEntity<>("Deleted" ,HttpStatus.ACCEPTED);
+    }
+
 }

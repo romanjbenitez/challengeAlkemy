@@ -19,4 +19,5 @@ public interface CharactersService {
     Character getCharacterByName(String name);
 
     void saveCharacter(Character character);
+    void deleteCharacter(Character character);
 }
