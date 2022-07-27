@@ -3,6 +3,7 @@ package com.challenge.alkemy.configurations;
 import com.challenge.alkemy.models.Admin;
 import com.challenge.alkemy.repositories.AdminRepository;
 
+import com.challenge.alkemy.services.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class WebAuthentication extends GlobalAuthenticationConfigurerAdapter {
     @Autowired
-    AdminRepository adminRepository;
+    AdminService adminService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -28,7 +29,7 @@ public class WebAuthentication extends GlobalAuthenticationConfigurerAdapter {
     @Override
     public void init(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(email -> {
-            Admin admin = adminRepository.findByEmail(email);
+            Admin admin = adminService.getAdmin(email);
             if (admin != null) {
                 return new User(admin.getEmail(), admin.getPassword(),
                         AuthorityUtils.createAuthorityList("ADMIN"));

@@ -20,7 +20,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/films")
+@RequestMapping("/movies")
 public class FilmController {
     @Autowired
     FilmService filmService;
@@ -128,4 +128,45 @@ public class FilmController {
         return new ResponseEntity<>("Deleted" ,HttpStatus.ACCEPTED);
     }
 
+    @PostMapping("/{idMovie}/characters/{idCharacter}")
+    public ResponseEntity<Object> addCharacterToFilm(@PathVariable Long idMovie, @PathVariable Long idCharacter ){
+        if(idCharacter < 0 || idMovie < 0 ){
+            return new ResponseEntity<>("Invalid id" , HttpStatus.FORBIDDEN);
+        }
+        Character currentCharacter = charactersService.getCharacter(idCharacter);
+        Film currentFilm = filmService.getFilmByID(idMovie);
+
+        if(currentFilm == null){
+            return new ResponseEntity<>("Please insert a valid idMovie" , HttpStatus.FORBIDDEN);
+        }
+        if(currentCharacter == null){
+            return new ResponseEntity<>("Please insert a valid idCharacter" , HttpStatus.FORBIDDEN);
+        }
+
+        FilmsCharacter filmsCharacter = new FilmsCharacter(currentFilm, currentCharacter);
+        filmsCharacterService.saveFilmsCharacter(filmsCharacter);
+
+        return new ResponseEntity<>("Added", HttpStatus.ACCEPTED);
+    }
+
+    @DeleteMapping("/{idMovie}/characters/{idCharacter}")
+    public ResponseEntity<Object> removeMovieCharacter(@PathVariable Long idMovie, @PathVariable Long idCharacter){
+
+        if(idCharacter < 0 || idMovie < 0 ){
+            return new ResponseEntity<>("Invalid id" , HttpStatus.FORBIDDEN);
+        }
+        Character currentCharacter = charactersService.getCharacter(idCharacter);
+        Film currentFilm = filmService.getFilmByID(idMovie);
+        if(currentFilm == null){
+            return new ResponseEntity<>("Please insert a valid idMovie" , HttpStatus.FORBIDDEN);
+        }
+        if(currentCharacter == null){
+            return new ResponseEntity<>("Please insert a valid idCharacter" , HttpStatus.FORBIDDEN);
+        }
+
+        FilmsCharacter currentFilmCharacter = filmsCharacterService.getFilmCharacter(currentFilm, currentCharacter);
+        filmsCharacterService.deleteFilmsCharacter(currentFilmCharacter);
+
+        return new ResponseEntity<>("Removed", HttpStatus.ACCEPTED);
+    }
 }

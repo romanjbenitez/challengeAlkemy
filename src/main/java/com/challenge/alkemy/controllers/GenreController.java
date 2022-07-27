@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/genres")
 public class GenreController {
     @Autowired
     GenreService genreService;
@@ -22,11 +22,11 @@ public class GenreController {
     @Autowired
     FilmService filmService;
 
-    @GetMapping("/genres")
+    @GetMapping
     public List<GenreDTO> getGenres(){
         return genreService.getGenres();
     }
-    @PostMapping("/genres")
+    @PostMapping
     public ResponseEntity<Object> createGenre(@RequestParam String name,
                                               @RequestParam String image,
                                               @RequestParam(required = false) String title){
