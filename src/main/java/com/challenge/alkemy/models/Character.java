@@ -27,6 +27,8 @@ public class Character {
     private String name;
     private long age;
     private int weight;
+
+    @Column(length=1000)
     private String story;
 
     @OneToMany(mappedBy="character", fetch=FetchType.EAGER)
